@@ -2,19 +2,40 @@ import time
 import asyncio
 from spade.agent import Agent
 from spade.behaviour import CyclicBehaviour
-from VerificandoExpressao import dividindoExpressao
+from VerificandoExpressao import dividindoExpressao,OrdemOperacoes
 
 class DummyAgent(Agent):
     class MyBehav(CyclicBehaviour):
         async def on_start(self):
             print("Starting behaviour . . .")
-#É o metodo no qual o nucleo da programação é feito porque            
-#esse método é chamado a cada interação do loop de comportamento 
+        
+        #É o metodo no qual o nucleo da programação é feito porque            
+        #esse método é chamado a cada interação do loop de comportamento 
         async def run(self):  
             print ("Digite a expressao")
-            expressao=str(input ())
-            dividindoExpressao(expressao)
+            #expressao = "23 + 12 - 55 + ( 2 + 4 ) - 8 / 2 ^ 2"
+            expressao=str(input ())    
+            valor= dividindoExpressao(expressao)
             
+            #Qual agente será chamado
+            while (len(valor)>1):
+                operadores =  OrdemOperacoes(valor)#Retorna um dicionario
+              
+                """
+                receiveragent = None
+                if operadores["Op"] == "-":
+                    receiveragent = SubtractionAgent("minusagent@anoxinon.me", "minus")
+                elif operadores["Op"] == "+":
+                    receiveragent = AdditionAgent("sumagent@anoxinon.me", "sum")
+                elif operadores["Op"] == "*":
+                    receiveragent = MultiplyAgent("multiplyagent@anoxinon.me", "multiply")
+                elif operadores["Op"] == "/":
+                    receiveragent = DivisionAgent("divisionagent@anoxinon.me", "division")
+                elif operadores["Op"] == "^":
+                    receiveragent = ExponentiationAgent("exponentiationAgent@anoxinon.me", "exponentiation")
+                
+                """
+
             await asyncio.sleep(1)
 
     async def setup(self):
