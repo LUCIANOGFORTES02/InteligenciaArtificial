@@ -3,8 +3,10 @@ import asyncio
 from spade.agent import Agent
 from spade.behaviour import CyclicBehaviour
 from VerificandoExpressao import dividindoExpressao,OrdemOperacoes
+from AgentAdicao import AdicaoAgent
+from AgentSub import SubAgent
 
-class DummyAgent(Agent):
+class CoordenadorAgent(Agent):
     class MyBehav(CyclicBehaviour):
         async def on_start(self):
             print("Starting behaviour . . .")
@@ -21,12 +23,13 @@ class DummyAgent(Agent):
             while (len(valor)>1):
                 operadores =  OrdemOperacoes(valor)#Retorna um dicionario
               
-                """
+                
                 receiveragent = None
                 if operadores["Op"] == "-":
-                    receiveragent = SubtractionAgent("minusagent@anoxinon.me", "minus")
+                    receiveragent = SubAgent(" ", "minus")#jid , senha
                 elif operadores["Op"] == "+":
-                    receiveragent = AdditionAgent("sumagent@anoxinon.me", "sum")
+                    receiveragent = AdicaoAgent(" ", " ")
+                """
                 elif operadores["Op"] == "*":
                     receiveragent = MultiplyAgent("multiplyagent@anoxinon.me", "multiply")
                 elif operadores["Op"] == "/":
@@ -44,7 +47,7 @@ class DummyAgent(Agent):
         self.add_behaviour(b)
 
 if __name__ == "__main__":
-    dummy = DummyAgent("agent1Coordenador@anoxinon.me", "coordenador")
+    dummy = CoordenadorAgent("agent1Coordenador@anoxinon.me", "coordenador")
     future = dummy.start()
     future.result()
 

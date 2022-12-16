@@ -13,8 +13,8 @@ def OrdemOperacoes (expressao):
     dic={}
 
     if '(' in expressao:
-        parenteseAbertura = [i for i, item in enumerate(expressao) if item == '(']#Loop com indices para
-        parenteseFechamento = [i for i, item in enumerate(expressao) if item == ')']#Descobrir a posição na expressao
+        parenteseAbertura = [i for i, j in enumerate(expressao) if j == '(']#Loop com indices para
+        parenteseFechamento = [i for i, j in enumerate(expressao) if j == ')']#Descobrir a posição na expressao
         #Pega o parentese max de abertura e o próximo de fechamento 
         print (parenteseAbertura)
         print (parenteseFechamento)
@@ -25,56 +25,60 @@ def OrdemOperacoes (expressao):
                 break
         
         if len(expressao[max(parenteseAbertura)+1:parenteseFechamento[posicao]-1]) <= 3:
-            x1 = float (expressao[max(parenteseAbertura) + 1])
-            x2 = float (expressao[parenteseFechamento[posicao]- 1])
-            dic['x1'] = x1
-            dic['x2'] = x2
+            valor1 = float (expressao[max(parenteseAbertura) + 1])
+            valor2 = float (expressao[parenteseFechamento[posicao]- 1])
+            dic['valor1'] = valor1
+            dic['valor2'] = valor2
             dic['Op'] = expressao[max(parenteseAbertura) + 2]
-            dic['n'] = operationIndex(expressao, max(parenteseAbertura), dic['Op']) - 1
+            dic['indiceOp'] = indiceOperador(expressao, max(parenteseAbertura), dic['Op']) - 1
             del(expressao[min(parenteseFechamento)])#Deleta os parenteses na expressão
             del(expressao[max(parenteseAbertura)])
         else:
             dic = OrdemOperacoes(expressao[max(parenteseAbertura)+1:parenteseFechamento[posicao]])
-            dic['n'] += max(parenteseAbertura) + 1
+            dic['indiceOp'] += max(parenteseAbertura) + 1
 
-    """
+    
     elif '^' in expressao:
-        x1 = float (expressao[expressao.index('^') - 1])
-        x2 = float (expressao[expressao.index('^') + 1])
-        n = [i for i, item in enumerate(expressao) if item == '^']
-        dic['x1'] = x1
-        dic['x2'] = x2
+        valor1 = float (expressao[expressao.index('^') - 1])
+        valor2 = float (expressao[expressao.index('^') + 1])
+        n = [i for i, j in enumerate(expressao) if j == '^']
+        dic['valor1'] = valor1
+        dic['valor2'] = valor2
         dic['Op'] = '^'
-        dic['n'] = expressao.index(dic['Op'])
+        dic['indiceOp'] = expressao.index(dic['Op'])
+        
     elif '*' in expressao:
-        x1 = float (expressao[expressao.index('*') - 1])
-        x2 = float (expressao[expressao.index('*') + 1])
-        dic['x1'] = x1
-        dic['x2'] = x2
+        valor1 = float (expressao[expressao.index('*') - 1])
+        valor2 = float (expressao[expressao.index('*') + 1])
+        dic['valor1'] = valor1
+        dic['valor2'] = valor2
         dic['Op'] = '*'
-        dic['n'] = expressao.index(dic['Op'])
+        dic['indiceOp'] = expressao.index(dic['Op'])
+
     elif '/' in expressao:
-        x1 = float (expressao[expressao.index('/') - 1])
-        x2 = float (expressao[expressao.index('/') + 1])
-        dic['x1'] = x1
-        dic['x2'] = x2
+        valor1 = float (expressao[expressao.index('/') - 1])
+        valor2 = float (expressao[expressao.index('/') + 1])
+        dic['valor1'] = valor1
+        dic['valor2'] = valor2
         dic['Op'] = '/'
-        dic['n'] = expressao.index(dic['Op'])
+        dic['indiceOp'] = expressao.index(dic['Op'])
+
     elif '-' in expressao:
-        x1 = float (expressao[expressao.index('-') - 1])
-        x2 = float (expressao[expressao.index('-') + 1])
-        dic['x1'] = x1
-        dic['x2'] = x2
+        valor1 = float (expressao[expressao.index('-') - 1])
+        valor2 = float (expressao[expressao.index('-') + 1])
+        dic['valor1'] = valor1
+        dic['valor2'] = valor2
         dic['Op'] = '-'
-        dic['n'] = expressao.index(dic['Op'])
+        dic['indiceOp'] = expressao.index(dic['Op'])
+
     elif '+' in expressao:
-        x1 = float (expressao[expressao.index('+') - 1])
-        x2 = float (expressao[expressao.index('+') + 1])
-        dic['x1'] = x1
-        dic['x2'] = x2
+        valor1 = float (expressao[expressao.index('+') - 1])
+        valor2 = float (expressao[expressao.index('+') + 1])
+        dic['valor1'] = valor1
+        dic['valor2'] = valor2
         dic['Op'] = '+'
-        dic['n'] = expressao.index(dic['Op'])
-    """
+        dic['indiceOp'] = expressao.index(dic['Op'])
+    
 
 
 
@@ -87,7 +91,7 @@ def OrdemOperacoes (expressao):
 
 
 
-def operationIndex(list, parantheses_ini, operacao):
+def indiceOperador(list, parantheses_ini, operacao):
     temp = list[parantheses_ini:]
     for i in range(1, len(temp)):
         if temp[i] == operacao:
