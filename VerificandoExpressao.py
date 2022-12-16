@@ -19,9 +19,9 @@ def OrdemOperacoes (expressao):
         print (max(parenteseAbertura))
         print (parenteseFechamento)
 
-        for i in parenteseFechamento:
+        for i in range (0,max(parenteseFechamento)):
             
-            if parenteseFechamento[i]>max(parenteseAbertura):
+            if parenteseFechamento[i]+1>max(parenteseAbertura)-1:
 
                 posicao=i
                 break
