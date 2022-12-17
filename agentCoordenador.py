@@ -6,6 +6,7 @@ from VerificandoExpressao import dividindoExpressao,OrdemOperacoes
 from AgentAdicao import AdicaoAgent
 from AgentSub import SubAgent
 from spade.message import Message 
+from AgentMultiplicacao import MultiplicacaoAgent
 
 class CoordenadorAgent(Agent):
     class  CoordenadorBehav(CyclicBehaviour):
@@ -16,8 +17,8 @@ class CoordenadorAgent(Agent):
         #esse método é chamado a cada interação do loop de comportamento 
         async def run(self):  
             print ("Digite a expressao")
-            #expressao = "23 + 12 - 55 + ( 2 + 4 ) - 8 / 2 ^ 2"
-            expressao=str(input ())    
+            expressao = "23 + 12 - 55 + ( 2 + 4 ) - 8 / 2 ^ 2"
+            #expressao=str(input ())    
             valor= dividindoExpressao(expressao)
             
             #Qual agente será chamado
@@ -30,9 +31,10 @@ class CoordenadorAgent(Agent):
                     receiveragent = SubAgent(" ", "minus")#jid , senha
                 elif operadores["Op"] == "+":
                     receiveragent = AdicaoAgent(" ", " ")
-                """
+                
                 elif operadores["Op"] == "*":
-                    receiveragent = MultiplyAgent("multiplyagent@anoxinon.me", "multiply")
+                    receiveragent = MultiplicacaoAgent("multiplyagent@anoxinon.me", "multiply")
+                """
                 elif operadores["Op"] == "/":
                     receiveragent = DivisionAgent("divisionagent@anoxinon.me", "division")
                 elif operadores["Op"] == "^":
@@ -41,29 +43,30 @@ class CoordenadorAgent(Agent):
                 """
 
                 await asyncio.sleep(1)
+                print("Valor1 e Valor2 = "+valores)
 
-                print("Valor 1 e Valor 2 "+valores)
-
-                msg = Message(to=receiveragent.jid)     
+                msg = Message( to = str(receiveragent.jid))     
                 # Set the "inform" FIPA performative
                 msg.set_metadata("performative", "inform")
                 msg.body = str(valores)
 
                 await self.send(msg)#Envia a mensagem para o agente escolhido
+
+                print("Mensagem enviada = " + valores)
                 #Recebe a mesagem de volta do agente que foi escolhido
                 msg = await self.receive(timeout=10) #Espera a mensagem por 10 segundos
                 if msg:
-                    print("Resultodo "+ msg.body )
+                    print("Resultado recebido"+ msg.body )
                     valor[operadores["n"]] = msg.body
                     del(valor[operadores['n'] + 1])
                     del(valor[operadores['n'] - 1])
-                    print("Answer:" + valor)
+                    print("Nova expressao " + valor)
                 else :
                     print("Mensagem n recebida")
 
 
     async def setup(self):
-        print("Agent starting . . .")
+        print("Agent Coordenador starting . . .")
         b = self.CoordenadorBehav()
         self.add_behaviour(b)
 
