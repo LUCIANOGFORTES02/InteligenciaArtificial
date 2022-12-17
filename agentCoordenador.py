@@ -32,7 +32,7 @@ class CoordenadorAgent(Agent):
                 elif operadores["Op"] == "+":
                     receiveragent = AdicaoAgent(" ", " ")
                 
-                elif operadores["Op"] == "*":
+                elif operadores["Op"]== "*":
                     receiveragent = MultiplicacaoAgent("multiplyagent@anoxinon.me", "multiply")
                 """
                 elif operadores["Op"] == "/":
@@ -44,8 +44,9 @@ class CoordenadorAgent(Agent):
 
                 await asyncio.sleep(1)
                 print("Valor1 e Valor2 = "+valores)
-
-                msg = Message( to = str(receiveragent.jid))     
+                print(" jid "+str(receiveragent.jid))
+                msg = Message(to=str(receiveragent.jid))
+                #msg.to=str(receiveragent.jid)# jid do recptor da mensagem
                 # Set the "inform" FIPA performative
                 msg.set_metadata("performative", "inform")
                 msg.body = str(valores)
@@ -58,8 +59,8 @@ class CoordenadorAgent(Agent):
                 if msg:
                     print("Resultado recebido"+ msg.body )
                     valor[operadores["n"]] = msg.body
-                    del(valor[operadores['n'] + 1])
-                    del(valor[operadores['n'] - 1])
+                    del(valor[operadores['n'] + 1])#Deletando valor1 e valor2 e substituindo o operador (-,+,/,*,^)
+                    del(valor[operadores['n'] - 1])#pela resposta devolvida pelos agentes
                     print("Nova expressao " + valor)
                 else :
                     print("Mensagem n recebida")

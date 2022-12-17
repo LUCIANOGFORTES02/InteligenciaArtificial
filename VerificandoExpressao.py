@@ -15,10 +15,8 @@ def OrdemOperacoes (expressao):
     if '(' in expressao:
         parenteseAbertura = [i for i, j in enumerate(expressao) if j == '(']#Loop com indices para
         parenteseFechamento = [i for i, j in enumerate(expressao) if j == ')']#Descobrir a posição na expressao
-        #Pega o parentese max de abertura e o próximo de fechamento 
-        print (parenteseAbertura)
-        print (parenteseFechamento)
-
+        #Pega o parentese max de abertura e o próximo de fechamento
+        
         for i in range (0,max(parenteseFechamento)):#Para pegar o parentese de fechamento
             if parenteseFechamento[i]>max(parenteseAbertura):
                 posicao=i
