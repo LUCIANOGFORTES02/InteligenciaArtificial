@@ -5,9 +5,10 @@ from spade.behaviour import CyclicBehaviour
 from VerificandoExpressao import dividindoExpressao,OrdemOperacoes
 from AgentAdicao import AdicaoAgent
 from AgentSub import SubAgent
+from spade.message import Message 
 
 class CoordenadorAgent(Agent):
-    class MyBehav(CyclicBehaviour):
+    class  CoordenadorBehav(CyclicBehaviour):
         async def on_start(self):
             print("Starting behaviour . . .")
         
@@ -22,7 +23,7 @@ class CoordenadorAgent(Agent):
             #Qual agente será chamado
             while (len(valor)>1):
                 operadores =  OrdemOperacoes(valor)#Retorna um dicionario
-              
+                valores = f"{operadores['valor1']} {operadores['valor2']}"
                 
                 receiveragent = None
                 if operadores["Op"] == "-":
@@ -39,11 +40,31 @@ class CoordenadorAgent(Agent):
                 
                 """
 
-            await asyncio.sleep(1)
+                await asyncio.sleep(1)
+
+                print("Valor 1 e Valor 2 "+valores)
+
+                msg = Message(to=receiveragent.jid)     
+                # Set the "inform" FIPA performative
+                msg.set_metadata("performative", "inform")
+                msg.body = str(valores)
+
+                await self.send(msg)#Envia a mensagem para o agente escolhido
+                #Recebe a mesagem de volta do agente que foi escolhido
+                msg = await self.receive(timeout=10) #Espera a mensagem por 10 segundos
+                if msg:
+                    print("Resultodo "+ msg.body )
+                    valor[operadores["n"]] = msg.body
+                    del(valor[operadores['n'] + 1])
+                    del(valor[operadores['n'] - 1])
+                    print("Answer:" + valor)
+                else :
+                    print("Mensagem n recebida")
+
 
     async def setup(self):
         print("Agent starting . . .")
-        b = self.MyBehav()
+        b = self.CoordenadorBehav()
         self.add_behaviour(b)
 
 if __name__ == "__main__":
