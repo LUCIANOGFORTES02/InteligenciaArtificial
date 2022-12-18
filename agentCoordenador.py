@@ -18,7 +18,8 @@ class CoordenadorAgent(Agent):
         async def run(self):  
             print ("Digite a expressao")
             #expressao = "23 + 12 - 55 + ( 2 + 4 ) - 8 / 2 ^ 2"
-            expressao=str(input ())    
+            expressao=str(input ())
+
             valor= dividindoExpressao(expressao)
             
             #Qual agente será chamado
@@ -72,13 +73,13 @@ class CoordenadorAgent(Agent):
                 print("Mensagem enviada do COORDENADOR= " + valores)
                 
                 #Recebe a mesagem de volta do agente que foi escolhido
-                msg = await self.receive(timeout=10) #Espera a mensagem por 10 segundos
+                msg = await self.receive(timeout=50) #Espera a mensagem por 10 segundos
                 if msg:
                     print("Resultado recebido do AGENTE ESCOLHIDO "+ msg.body )
-                    valor[operadores["n"]] = msg.body
-                    del(valor[operadores['n'] + 1])#Deletando valor1 e valor2 e substituindo o operador (-,+,/,*,^)
-                    del(valor[operadores['n'] - 1])#pela resposta devolvida pelos agentes
-                    print("Nova expressao " + valor)
+                    valor[operadores["indiceOp"]] = msg.body # A passagem do indice estva errado
+                    del(valor[operadores['indiceOp'] + 1])#Deletando valor1 e valor2 e substituindo o operador (-,+,/,*,^)
+                    del(valor[operadores['indiceOp'] - 1])#pela resposta devolvida pelos agentes
+                    print("Nova expressao " + valor[0]) #ele nao estava printando a list -> tem que alterar essa logica pq nao esta prevendo tudo
                 
 
     async def setup(self):

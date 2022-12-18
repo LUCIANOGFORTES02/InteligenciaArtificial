@@ -99,6 +99,7 @@ def indiceOperador(list, parantheses_ini, operacao):
 lista = "( (100 - 413 ) * ( 20 - 5 * 4 ) + 25 ) / 5"
 # data = separateString("(100 – 413 * (20 – 5 * 4) + 25) / 5")
 x=dividindoExpressao(str(lista))
+print(x)
 y=OrdemOperacoes(x)
 print(y["Op"])
 
