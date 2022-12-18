@@ -80,10 +80,6 @@ def OrdemOperacoes (expressao):
 
 
 
-
-
-
-
     return dic
 
 

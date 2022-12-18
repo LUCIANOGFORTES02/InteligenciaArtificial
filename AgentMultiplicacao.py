@@ -7,53 +7,53 @@ from spade.message import Message
 
 class MultiplicacaoAgent(Agent):
     class MultiplicacaoBehav(CyclicBehaviour):
-        async def on_start(self):
-            print("Starting behaviour . . .")
-            self.counter = 0
+        #async def on_start(self):
+         #   print("Starting behaviour . . .")
+          #  self.counter = 0
 
         async def run(self):
             # Espere pela mensagem por 10 segundos
             msg = await self.receive(timeout=10)#Recebendo a mensagem
-
+            print("Mensagem recebida do Coordenador")
             if msg:# Enviando de volta para o coordenador a resposta
                 valores = msg.body.split(" ")
-                resposta = valores[0] * valores[1]
-                msg = Message() 
-                msg.to=("agent1Coordenador@anoxinon.me")# jid do recptor da mensagem
+                resposta = float(valores[0]) * float(valores[1])
+                msg = Message(to="agent1Coordenador@anoxinon.me")#agent1Coordenador@anoxinonme                         #coordenatoragent@anoxinon.me
+                #msg.to=("agent1Coordenador@anoxinon.me")# jid do recptor da mensagem
                 # Set the "inform" FIPA performative
                 msg.set_metadata("performative", "inform")
                 msg.body = str(resposta) 
 
                 await self.send(msg)#Mensagem sendo enviada
 
-                print(f"resposta send! ({resposta})")
+                print(f"resposta enviada para o COORDENADOR ! ({resposta})")
                 await self.agent.stop()
             else:
-                print("Mensagem n    recebida")
+                print("Mensagem n recebida do coordenador")
 
-            # stop agent from behaviour
             
             
 
-        async def on_end(self):
-            print("Behaviour finished with exit code {}.".format(self.exit_code))
+        #async def on_end(self):
+        #   print("Behaviour finished with exit code {}.".format(self.exit_code))
 
     async def setup(self):
-        print("Agent starting . . .")
-        self.my_behav = self.MultiplicacaoBehav()
+        print("Agent Multiplicação starting . . .")
+        my_behav = self.MultiplicacaoBehav()
         # Método usado pelo SPADE para despachar as mensagens recebidas para o comportamento que está 
         # aguardando aquela mensagem
         template = Template()
         template.set_metadata("performative", "inform")
 
         #Primeiro parametro é o comportamento que queremo adicionar o segundo é o modelo associado a esse comportamento
-        self.add_behaviour(self.my_behav, template) 
+        self.add_behaviour(my_behav, template) 
 
 if __name__ == "__main__":
-    dummy = MultiplicacaoAgent("multiplyagent@anoxinon.me", "multiply")#"multiplyagent@anoxinon.me", "multiply")
-    future = dummy.start()
+    dummy = MultiplicacaoAgent("agent2Multipli@anoxinon.me", "multiplicacao")#"agent2Multipli@anoxinon.me", "multiplicacao"
+    future = dummy.start()                                             #"multiplyagent@anoxinon.me", "multiply"
     future.result()  # Wait until the start method is finished
-    dummy.web.start(hostname="127.0.0.1", port="10000")
+    
+    
 
 
     # wait until user interrupts with ctrl+C
@@ -61,8 +61,8 @@ if __name__ == "__main__":
         try:
             time.sleep(1)
         except KeyboardInterrupt:
+            dummy.stop()           
             break
-    dummy.stop()
 
 """import time
 

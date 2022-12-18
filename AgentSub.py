@@ -5,28 +5,21 @@ from spade.behaviour import CyclicBehaviour
 
 class SubAgent(Agent):
     class MyBehav(CyclicBehaviour):
-        async def on_start(self):
-            print("Starting behaviour . . .")
-            self.counter = 0
+       
 
         async def run(self):
             print("Counter: {}".format(self.counter))
-            self.counter += 1
-            if self.counter > 3:
-                self.kill(exit_code=10)
-                return
-            await asyncio.sleep(1)
+            
 
-        async def on_end(self):
-            print("Behaviour finished with exit code {}.".format(self.exit_code))
 
+        
     async def setup(self):
         print("Agent starting . . .")
         self.my_behav = self.MyBehav()
         self.add_behaviour(self.my_behav)
 
 if __name__ == "__main__":
-    dummy = SubAgent("your_jid@your_xmpp_server", "your_password")
+    dummy = SubAgent(" ", " ")
     future = dummy.start()
     future.result()  # Wait until the start method is finished
 

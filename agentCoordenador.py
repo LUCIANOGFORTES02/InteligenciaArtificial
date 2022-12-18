@@ -17,15 +17,15 @@ class CoordenadorAgent(Agent):
         #esse método é chamado a cada interação do loop de comportamento 
         async def run(self):  
             print ("Digite a expressao")
-            expressao = "23 + 12 - 55 + ( 2 + 4 ) - 8 / 2 ^ 2"
-            #expressao=str(input ())    
+            #expressao = "23 + 12 - 55 + ( 2 + 4 ) - 8 / 2 ^ 2"
+            expressao=str(input ())    
             valor= dividindoExpressao(expressao)
             
             #Qual agente será chamado
             while (len(valor)>1):
                 operadores =  OrdemOperacoes(valor)#Retorna um dicionario
                 valores = f"{operadores['valor1']} {operadores['valor2']}"
-                
+                """
                 receiveragent = None
                 if operadores["Op"] == "-":
                     receiveragent = SubAgent(" ", "minus")#jid , senha
@@ -33,38 +33,53 @@ class CoordenadorAgent(Agent):
                     receiveragent = AdicaoAgent(" ", " ")
                 
                 elif operadores["Op"]== "*":
-                    receiveragent = MultiplicacaoAgent("multiplyagent@anoxinon.me", "multiply")
-                """
+                    receiveragent = MultiplicacaoAgent("agent2Multipli@anoxinon.me", "multiplicacao")
+                 
                 elif operadores["Op"] == "/":
                     receiveragent = DivisionAgent("divisionagent@anoxinon.me", "division")
                 elif operadores["Op"] == "^":
                     receiveragent = ExponentiationAgent("exponentiationAgent@anoxinon.me", "exponentiation")
                 
                 """
-
-                await asyncio.sleep(1)
+                
+                receiveragent = None
+                """
+                if operands["Op"] == "+":
+                    receiveragent = AdditionAgent("sumagent@anoxinon.me", "sum")
+                elif operands["Op"] == "-":
+                    receiveragent = SubtractionAgent("minusagent@anoxinon.me", "minus")
+                elif operands["Op"] == "/":
+                    receiveragent = DivisionAgent("divisionagent@anoxinon.me", "division")
+                elif operands["Op"] == "^":
+                    receiveragent = ExponentiationAgent("exponentiationAgent@anoxinon.me", "exponentiation")
+                """
+                if operadores["Op"] == "*":
+                    receiveragent = MultiplicacaoAgent("agent2Multipli@anoxinon.me", "multiplicacao")
+                  #agent2Multipli@anoxinon.me", "multiplicacao  #multiplyagent@anoxinon.me", "multiply
+                await receiveragent.start(auto_register=True)
+                
+                
+                #await asyncio.sleep(1)
                 print("Valor1 e Valor2 = "+valores)
-                print(" jid "+str(receiveragent.jid))
-                msg = Message(to=str(receiveragent.jid))
+                #print(" jid "+str(receiveragent.jid))
+                msg = Message(to="agent2Multipli@anoxinon.me")
                 #msg.to=str(receiveragent.jid)# jid do recptor da mensagem
                 # Set the "inform" FIPA performative
                 msg.set_metadata("performative", "inform")
                 msg.body = str(valores)
 
                 await self.send(msg)#Envia a mensagem para o agente escolhido
-
-                print("Mensagem enviada = " + valores)
+                print("Mensagem enviada do COORDENADOR= " + valores)
+                
                 #Recebe a mesagem de volta do agente que foi escolhido
                 msg = await self.receive(timeout=10) #Espera a mensagem por 10 segundos
                 if msg:
-                    print("Resultado recebido"+ msg.body )
+                    print("Resultado recebido do AGENTE ESCOLHIDO "+ msg.body )
                     valor[operadores["n"]] = msg.body
                     del(valor[operadores['n'] + 1])#Deletando valor1 e valor2 e substituindo o operador (-,+,/,*,^)
                     del(valor[operadores['n'] - 1])#pela resposta devolvida pelos agentes
                     print("Nova expressao " + valor)
-                else :
-                    print("Mensagem n recebida")
-
+                
 
     async def setup(self):
         print("Agent Coordenador starting . . .")
@@ -72,10 +87,11 @@ class CoordenadorAgent(Agent):
         self.add_behaviour(b)
 
 if __name__ == "__main__":
-    dummy = CoordenadorAgent("agent1Coordenador@anoxinon.me", "coordenador")
-    future = dummy.start()
+    dummy = CoordenadorAgent("agent1Coordenador@anoxinon.me", "coordenador")#agent1Coordenador@anoxinon.me", "coordenador
+    future = dummy.start()                                                #coordenatoragent@anoxinon.me", "coordenator
     future.result()
 
+    
 
     print("Wait until user interrupts with ctrl+C")
     try:
