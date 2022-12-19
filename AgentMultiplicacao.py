@@ -7,9 +7,9 @@ from spade.message import Message
 
 class MultiplicacaoAgent(Agent):
     class MultiplicacaoBehav(CyclicBehaviour):
-        #async def on_start(self):
-         #   print("Starting behaviour . . .")
-          #  self.counter = 0
+        async def on_start(self):
+            print("Starting MULTIPLICAÇÃO behaviour . . .")
+          
 
         async def run(self):
             # Espere pela mensagem por 10 segundos
@@ -26,7 +26,7 @@ class MultiplicacaoAgent(Agent):
 
                 await self.send(msg)#Mensagem sendo enviada
 
-                print(f"resposta enviada para o COORDENADOR ! ({resposta})")
+                print(f"resposta enviada para o COORDENADOR  ({resposta})")
                 await self.agent.stop()
             else:
                 print("Mensagem n recebida do coordenador")
@@ -38,7 +38,7 @@ class MultiplicacaoAgent(Agent):
         #   print("Behaviour finished with exit code {}.".format(self.exit_code))
 
     async def setup(self):
-        print("Agent Multiplicação starting . . .")
+        print("Agent MULTIPLICAÇÃO starting . . .")
         my_behav = self.MultiplicacaoBehav()
         # Método usado pelo SPADE para despachar as mensagens recebidas para o comportamento que está 
         # aguardando aquela mensagem
@@ -49,8 +49,8 @@ class MultiplicacaoAgent(Agent):
         self.add_behaviour(my_behav, template) 
 
 if __name__ == "__main__":
-    dummy = MultiplicacaoAgent("agent2Multipli@anoxinon.me", "multiplicacao")#"agent2Multipli@anoxinon.me", "multiplicacao"
-    future = dummy.start()                                             #"multiplyagent@anoxinon.me", "multiply"
+    dummy = MultiplicacaoAgent("agent2Multipli@anoxinon.me", "multiplicacao")
+    future = dummy.start()                                            
     future.result()  # Wait until the start method is finished
     
     
@@ -63,62 +63,3 @@ if __name__ == "__main__":
         except KeyboardInterrupt:
             dummy.stop()           
             break
-
-"""import time
-
-from spade.agent import Agent
-from spade.behaviour import CyclicBehaviour
-from spade.template import Template
-
-from makeMessage import makeMessage
-
-
-class MultiplyAgent(Agent):
-    class MultiplyBehav(CyclicBehaviour):
-        def generateresposta(self, n1, n2):
-            return float(n1) * float(n2)
-
-        async def run(self):
-            print("MultiplyBehav running")
-
-            # wait for a message for 10 seconds
-            msg = await self.receive(timeout=10)
-            if msg:
-                valores = msg.body.split(" ")
-                resposta = self.generateresposta(valores[0], valores[1])
-                msgSend = makeMessage("coordenatoragent@anoxinon.me", resposta)
-
-                await self.send(msgSend)
-
-                print(f"resposta send! ({resposta})")
-                await self.agent.stop()
-            else:
-                print("Did not received any message after 10 seconds")
-
-            # stop agent from behaviour
-
-    async def setup(self):
-        print("ReceiverAgent started")
-        multiplyBehav = self.MultiplyBehav()
-
-        template = Template()
-        template.set_metadata("performative", "inform")
-
-        self.add_behaviour(multiplyBehav, template)
-
-
-if __name__ == "__main__":
-    receiveragent = MultiplyAgent("multiplyagent@anoxinon.me", "multiply")
-    future = receiveragent.start()
-    future.resposta()
-
-    receiveragent.web.start(hostname="127.0.0.1", port="10000")
-
-    while True:
-        try:
-            time.sleep(1)
-        except KeyboardInterrupt:
-            receiveragent.stop()
-            break
-
-    print("Agents finished")"""
